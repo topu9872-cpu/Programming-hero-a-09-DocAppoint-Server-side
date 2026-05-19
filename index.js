@@ -8,6 +8,7 @@ require('dotenv').config()
 
 
 app.use(cors())
+app.use(express.json())
 const port = 2000
 
 const uri = process.env.MONGODB_URL;
@@ -29,16 +30,41 @@ async function run() {
 
         const db = client.db('doctor-apointment');
         const doctorCollections = db.collection('doctors');
+        const bookingCollections = db.collection('booking-appoinment');
 
         app.get('/all-doctors', async (req, res) => {
             const result = await doctorCollections.find().toArray();
             res.json(result)
         })
         app.get('/all-doctors/:id', async (req, res) => {
-            const {id}=req.params;
-            const result = await doctorCollections.findOne({_id: new ObjectId(id)});
+            const { id } = req.params;
+            const result = await doctorCollections.findOne({ _id: new ObjectId(id) });
             res.json(result)
         })
+        /**
+         * ! appoinment booking
+         */
+
+        app.get('/booking-appoinment', async (req, res) => {
+            const result = await bookingCollections.find().toArray();
+            res.json(result)
+        })
+
+
+        app.post('/booking-appoinment', async (req, res) => {
+            const bookingdata = req.body;
+            const result = await bookingCollections.insertOne(bookingdata);
+            res.json(result)
+
+        });
+        app.delete('/booking-appoinment:id', async (req, res) => {
+            const { id } = req.params;
+            const result = await bookingCollections.deleteOne({_id: new ObjectId(id)});
+            res.json(result)
+        });
+
+
+
 
 
         await client.connect();
