@@ -57,13 +57,19 @@ async function run() {
             res.json(result)
 
         });
-        app.delete('/booking-appoinment:id', async (req, res) => {
+        app.delete('/booking-appoinment/:id', async (req, res) => {
             const { id } = req.params;
             const result = await bookingCollections.deleteOne({_id: new ObjectId(id)});
+            console.log(result)
             res.json(result)
         });
 
-
+app.patch('/booking-appoinment/:id',async(req,res)=>{
+    const {id}=req.params;
+    const update=req.body;
+    const result=await bookingCollections.updateOne({_id:new ObjectId(id)},{$set:update});
+    res.json(result)
+})
 
 
 
