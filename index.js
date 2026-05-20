@@ -24,6 +24,19 @@ const client = new MongoClient(uri, {
     }
 });
 
+// maddlewate
+
+const varifiyToken=async(req,res,next)=>{
+const authHeader=req?.headers.authorization
+console.log('dfghjghjkl',authHeader)
+next()
+}
+
+
+
+
+
+
 
 async function run() {
     try {
@@ -45,7 +58,7 @@ async function run() {
          * ! appoinment booking
          */
 
-        app.get('/booking-appoinment', async (req, res) => {
+        app.get('/booking-appoinment',varifiyToken, async (req, res) => {
             const result = await bookingCollections.find().toArray();
             res.json(result)
         })
