@@ -10,7 +10,7 @@ require('dotenv').config()
 
 app.use(cors())
 app.use(express.json())
-const port = 2000
+const port = process.env.PORT
 
 const uri = process.env.MONGODB_URL;
 
@@ -27,15 +27,14 @@ const client = new MongoClient(uri, {
 
 // maddlewate
 
-const JWTS= createRemoteJWKSet(
-    new URL('http://localhost:3000/api/auth/jwks')
+const JWKS= createRemoteJWKSet(
+    new URL(`${process.env.CELINT_URL}/api/auth/jwks`)
 )
-
 
 
 const varifiyToken=async(req,res,next)=>{
 const authHeader=req?.headers.authorization
-if(authHeader){
+if(!authHeader){
     return res.status(401).json({message: 'Unauthorized'})
 }
 const token=authHeader.split(' ')[1]
@@ -83,7 +82,6 @@ async function run() {
             res.json(result)
         })
 
-
         app.post('/booking-appoinment', async (req, res) => {
             const bookingdata = req.body;
             const result = await bookingCollections.insertOne(bookingdata);
@@ -104,11 +102,9 @@ app.patch('/booking-appoinment/:id',async(req,res)=>{
     res.json(result)
 })
 
+        // await client.connect();
 
-
-        await client.connect();
-
-        await client.db("admin").command({ ping: 1 });
+        // await client.db("admin").command({ ping: 1 });
         console.log("Pinged your deployment. You successfully connected to MongoDB!");
     } finally {
 
@@ -116,16 +112,6 @@ app.patch('/booking-appoinment/:id',async(req,res)=>{
     }
 }
 run().catch(console.dir);
-
-
-
-
-
-
-
-
-
-
 
 
 

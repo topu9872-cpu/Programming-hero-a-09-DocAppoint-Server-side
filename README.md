@@ -68,4 +68,3 @@ JWT_SECRET=your_secret_key
 
 Mehedi Hasan Topu
 
-Portfolio: https://topudev.vercel.app/
