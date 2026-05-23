@@ -43,8 +43,7 @@ if(!token){
 }
 try{
     const {payload}=await jwtVerify(token,JWKS)
-    next()
-    console.log(payload)
+    
 }
 catch(error){
 return res.status(403).json({message: 'Forbidden'})
